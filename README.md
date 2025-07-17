@@ -42,4 +42,3 @@ Music & Licensing
 Feedback & Contact
 ------------------
 Questions or feedback? Reach out at Jonathon.koerner@gmail.com!
-
