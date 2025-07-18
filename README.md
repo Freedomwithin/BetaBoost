@@ -1,44 +1,69 @@
-BetaBoost – Smarter Climbing Progress
+# BetaBoost – Smarter Climbing Progress
 
-======================================
-
-BetaBoost is your all-in-one climbing training companion!
+**BetaBoost** is your all-in-one climbing training companion!  
 Track your sessions, set goals, discover new drills, and get AI-powered encouragement—all in a clean, customizable dashboard.
 
-Currently focused on bouldering, but we’ll be adding support for top rope climbing, belay, and partner/roped gym activities soon.
+_Currently focused on bouldering. Support for top-rope, rope partnership, and more gym activities is coming soon._
 
-Demo Video
-----------
-[Check out a quick tour here](https://vimeo.com/manage/videos/1102012730)
+---
 
-Key Features
-------------
+## Live Demo
+
+[**Try BetaBoost instantly on Vercel**](https://beta-boost.vercel.app)  
+_No installs or coding required – just open in any browser!_
+
+---
+
+## Key Features
+
 - Track bouldering sessions and progress
-- Log climbs with grades and styles
-- Browse a library of training drills and warm-ups
-- Set and manage climbing goals
-- View a structured weekly routine
-- Get encouragement and answers from a basic AI assistant
-- Switch between beautiful visual themes
+- Log climbs with grades and climbing styles
+- Browse a categorized library of training drills and warm-ups
+- Set, edit, and manage your climbing goals
+- Visualize your weekly routine and session history
+- Get answers, encouragement, and training ideas from an integrated AI assistant
+- Modern, responsive interface—works on desktop or mobile
 
-Updates Coming Soon
--------------------
-- Support for top rope, belay, and partner-based climbing
-- Smarter AI coach with real-time training advice
-- More customizable routines and analytics
+---
 
-How To Use
-----------
-1. Clone this repo or visit the live link
-2. Login or get started without an account
-3. Browse tabs to log climbs, find drills, and track goals
-4. Ask questions in the "Ask AI Bot" tab
+## Updates Coming Soon
 
-Music & Licensing
------------------
-- Includes background music: Feel It Still (Flatbush Zombies Remix) by Portugal. The Man
-- All other code and assets © 2024 Jonathon Koerner. See LICENSE file for details.
+- Support for top rope, lead, and partner-based climbing
+- “Smarter” AI coach with real-time advice and adaptive training
+- More personal stats and customizable analytics
+- Expanded drill/goal features and social sharing
 
-Feedback & Contact
-------------------
-Questions or feedback? Reach out at Jonathon.koerner@gmail.com!
+---
+
+## How To Use
+
+1. **Visit the live app:**  
+   Open the [BetaBoost Vercel link](https://beta-boost.vercel.app) in your browser  
+   _or_
+2. **Clone locally:**  
+git clone https://github.com/Freedomwithin/BetaBoost.git
+cd BetaBoost
+npm install
+npm run dev
+3. Explore all features in the navigation tabs—no signup required.
+4. Log your climbs, add goals, and try session drills.
+5. Interact with the "AI Coach" tab for personalized suggestions and motivation.
+
+---
+
+## Music & Licensing
+
+- **Background music:** "Feel It Still (Flatbush Zombies Remix)" by Portugal. The Man (for demo purposes only)
+- All code and original assets © 2024 Jonathon Koerner.
+- See the LICENSE file for open-source and third-party details.
+
+---
+
+## Feedback & Contact
+
+Questions, suggestions, or want to contribute?  
+Email: Jonathon.koerner@gmail.com
+
+---
+
+_This project is always evolving. If you use BetaBoost or want to see new features, please reach out!_
