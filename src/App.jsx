@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   ChakraProvider, Box, Heading, Tabs, TabList, TabPanels, Tab, TabPanel, extendTheme, HStack, Button
 } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import Dashboard from "./components/Dashboard";
 import LogClimbForm from "./components/LogClimbForm";
 import DrillLibrary from "./components/DrillLibrary";
@@ -9,14 +10,14 @@ import WarmUp from "./components/WarmUp";
 import CoolDown from "./components/CoolDown";
 import WeeklyRoutine from "./components/WeeklyRoutine";
 import Goals from "./components/Goals";
-import ChatBot from "./components/ChatBot"; // <--- AI bot import
+import ChatBot from "./components/ChatBot"; // AI bot import
 
 // Define your palettes
 const colorPalettes = {
   leafy: {
     name: "Leafy",
     colors: {
-      50:  "#e9f8f1",
+      50: "#e9f8f1",
       100: "#c8efdb",
       200: "#a5e4c3",
       300: "#79d9a6",
@@ -31,7 +32,7 @@ const colorPalettes = {
   ocean: {
     name: "Ocean",
     colors: {
-      50:  "#e3f8ff",
+      50: "#e3f8ff",
       100: "#bbeeff",
       200: "#8fd4f9",
       300: "#53b2e9",
@@ -46,7 +47,7 @@ const colorPalettes = {
   sunset: {
     name: "Sunset",
     colors: {
-      50:  "#fff8e1",
+      50: "#fff8e1",
       100: "#ffecb3",
       200: "#ffd180",
       300: "#ffab40",
@@ -59,6 +60,22 @@ const colorPalettes = {
     }
   }
 };
+
+// Animated gradient keyframes for the title
+const colorWave = keyframes`
+  0% {
+    background-position: 0% 50%;
+    text-shadow: 2px 4px 16px #122, 0 2px 8px #fff3;
+  }
+  50% {
+    background-position: 100% 50%;
+    text-shadow: 0 0 22px #24c6dc77, 0 6px 32px #ff512f55;
+  }
+  100% {
+    background-position: 0% 50%;
+    text-shadow: 2px 4px 16px #122, 0 2px 8px #fff3;
+  }
+`;
 
 function App() {
   const [palette, setPalette] = useState("leafy");
@@ -90,7 +107,7 @@ function App() {
     "Cool Down",
     "Weekly Routine",
     "Goals",
-    "A.I Coach" // Added bot tab
+    "A.I Coach"
   ];
 
   return (
@@ -98,7 +115,10 @@ function App() {
       <Box
         minH="100vh"
         w="100vw"
-        bgGradient={`linear(to-tr, ${palette}.800 0%, ${palette}.600 100%)`}
+        bgImage="url('/indoor-climbing.PNG')"
+        bgSize="cover"
+        bgPosition="center"
+        bgRepeat="no-repeat"
         display="flex"
         alignItems="center"
         justifyContent="center"
@@ -113,7 +133,6 @@ function App() {
           bg="whiteAlpha.95"
           borderRadius="2xl"
           boxShadow="2xl"
-          backdropFilter="blur(5px)"
           overflowY="auto"
         >
           {/* Color Theme Picker */}
@@ -136,12 +155,23 @@ function App() {
           <Heading
             mb={8}
             fontWeight="extrabold"
-            fontSize={{ base: "2xl", md: "3xl" }}
             letterSpacing="tight"
-            color="black"
             textAlign="center"
+            fontFamily="'Montserrat', sans-serif"
+            fontSize={{
+              base: "2.2rem",
+              sm: "2.8rem",
+              md: "3.7rem",
+              lg: "4.1rem"
+            }}
+            bgGradient="linear(105deg, #ff512f 0%, #dd2476 40%, #24c6dc 80%, #514a9d 100%, #ff512f 130%)"
+            bgClip="text"
+            sx={{
+              backgroundSize: "200% 200%",
+              animation: `${colorWave} 3.6s ease-in-out infinite`,
+            }}
           >
-            BetaBoost 🧗‍♂️
+            BetaBoost
           </Heading>
 
           <Tabs
@@ -177,7 +207,7 @@ function App() {
               <TabPanel><CoolDown /></TabPanel>
               <TabPanel><WeeklyRoutine /></TabPanel>
               <TabPanel><Goals /></TabPanel>
-              <TabPanel><ChatBot /></TabPanel> {/* AI bot tab content */}
+              <TabPanel><ChatBot /></TabPanel>
             </TabPanels>
           </Tabs>
         </Box>
