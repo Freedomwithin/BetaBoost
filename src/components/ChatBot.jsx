@@ -6,76 +6,132 @@ export default function ChatBot() {
     {
       role: "assistant",
       text:
-        "Hi climber! I'm your personal support bot. Tell me what you're working on or struggling with — let's level up your game! 🧗‍♂️💪",
+        "Hi climber! I'm here to help you get better, not just at what you enjoy, but at what will make the biggest impact. What's on your mind—do you want advice, motivation, or help working through a struggle?",
     },
   ]);
   const [input, setInput] = useState("");
-  const [userWeakness, setUserWeakness] = useState(null);
+  const [lastFocus, setLastFocus] = useState(null);
 
-  // Smarter AI logic: emotion, struggle, motivation
   function getBotReply(userText) {
     const txt = userText.toLowerCase();
-    let reply = "";
 
-    // BASIC CONVERSATION STARTERS
+    // Motivational greetings and emotional support
     if (txt.includes("hi") || txt.includes("hello")) {
-      return "Hey there! What's going on in your climbing lately?";
+      return "Welcome back! What aspect of your climbing do you want to talk about or improve today?";
+    }
+    if (txt.includes("struggle") || txt.includes("problem") || txt.includes("stuck")) {
+      return "Many climbers hit plateaus or avoid their weak points. What's the one thing you struggle with or avoid most? Let's tackle it together.";
+    }
+    if (txt.includes("burnout")) {
+      return "Climbing can be intense. Remember to take rest days, celebrate progress, and keep the fun in your sessions.";
+    }
+    if (txt.includes("scared") || txt.includes("afraid") || txt.includes("nervous")) {
+      return "It's normal to feel nervous! Fears only shrink when you face them. Is it the height, falling, or something else? Let's break it down.";
+    }
+    if (txt.includes("injury") || txt.includes("hurt") || txt.includes("pain")) {
+      return "Please listen to your body! Focus on recovery, mobility, and technique drills that don't aggravate the area. Healing now means stronger sessions later.";
+    }
+    if (txt.includes("progress") || txt.includes("plateau")) {
+      return "Plateaus are a sign you’re pushing your limits! Target what you avoid most and measure any improvement—no matter how small. Consistent effort will crack the plateau.";
     }
 
-    // MOTIVATIONAL / EMOTIONAL RESPONSES
-    if (txt.includes("scared") || txt.includes("afraid")) {
-      return "It’s okay to feel scared! Are you more nervous on overhangs or runs where you’re high off the ground?";
+    // User says what they are good at - gently nudge toward weaknesses
+    if (
+      txt.includes("i'm good at") ||
+      txt.includes("i am good at") ||
+      txt.includes("i like") ||
+      txt.includes("i enjoy") ||
+      txt.includes("favourite") ||
+      txt.includes("favorite")
+    ) {
+      if (lastFocus) {
+        return `Enjoying your strengths is important, but true progress comes from facing your weaknesses. Want to work on your ${lastFocus}?`;
+      }
+      return "It's great to enjoy climbing what you love. But real growth happens where you're least comfortable. Want to talk about what you avoid or dread at the gym?";
     }
 
-    // DETECT SPECIFIC STRUGGLES
-    if (txt.includes("grip") || txt.includes("fingers")) {
-      setUserWeakness("grip");
-      return "Finger strength is a long game. Try dead-hangs or limit boulders on small edges. Want help designing a grip routine?";
+    // Training type selection
+    if (txt.includes("technique")) {
+      setLastFocus("technique");
+      return "Focusing on technique is a game-changer. Practice drills like silent feet, backsteps, or foot-swap challenges. Do you know which movement feels least natural or most insecure for you?";
     }
-    if (txt.includes("footwork")) {
-      setUserWeakness("footwork");
-      return "Footwork takes attention! Try Silent Feet or Eyes-Closed Feet drills to level up. Want me to suggest some?";
+    if (txt.includes("strength")) {
+      setLastFocus("strength");
+      return "Strength comes from quality over quantity. Limit bouldering, weighted hangs, and core tension work help a lot. Need a simple routine, or advice on finger training safety?";
     }
-    if (txt.includes("core") || txt.includes("body tension")) {
-      setUserWeakness("core");
-      return "Core is key! Planks, L-sits, and one-arm moves can make a huge difference. Need a weekly plan?";
+    if (txt.includes("power")) {
+      setLastFocus("power");
+      return "Power is built explosively. Try double dynos, campus board moves, or big coordinated reaches. But start rested and focus on good form first to avoid injury.";
     }
     if (txt.includes("endurance")) {
-      setUserWeakness("endurance");
-      return "Endurance comes with time. ARC sessions and 4x4s help. Want a sample endurance day plan?";
+      setLastFocus("endurance");
+      return "Endurance grows from time-on-wall: ARC (easy, continuous climbing), 4x4s, and lap sessions help you stay in motion and recover faster. Would you like an example session or a pacing tip?";
     }
-    if (txt.includes("injury") || txt.includes("hurt")) {
-      return "First — rest and don’t rush it. Recovery is training too. Is it related to fingers, shoulders, or something else?";
+    if (txt.includes("mobility") || txt.includes("flexibility")) {
+      setLastFocus("mobility");
+      return "Mobility unlocks more climbable positions and injury resistance. Incorporate lower body stretches and high-step drills. Want a few favorite mobility drills?";
+    }
+    if (txt.includes("mental") || txt.includes("head") || txt.includes("focus")) {
+      setLastFocus("mental");
+      return "Mental training is often overlooked, but it's crucial. Try visualization, breathing routines, and controlled falls to master your nerves. Is fear or focus the bigger block for you?";
     }
 
-    // WEAKNESS FOLLOW-UP HINTING
-    if (txt.includes("i'm good at") || txt.includes("i like") || txt.includes("i prefer")) {
-      if (userWeakness) {
-        return `That's awesome — but don't forget to work on your ${userWeakness} too 😉. Want help tackling it with a fun drill?`;
-      } else {
-        return `Nice! What do you think you're *not yet* good at? That can unlock huge gains. Want to explore that?`;
+    // If user asks for a plan, drills, or resources
+    if (txt.includes("plan") || txt.includes("routine")) {
+      if (lastFocus === "technique") {
+        return "Try silent feet and backstep drills every warmup. Afterward, focus on smooth, controlled movement on at least one climb per session. Want to track your results after a week?";
       }
+      if (lastFocus === "strength") {
+        return "Mix two days a week of fingerboard hangs and core work with low-rep bouldering. Rest well and listen to your body. Want detailed sets and rest schedules?";
+      }
+      if (lastFocus === "endurance") {
+        return "ARC: 2–3 sets of 15 minutes easy climbing, with 10 minutes rest between. Modify difficulty to never 'pump out.' Would you like a 4x4 protocol as well?";
+      }
+      if (lastFocus === "mobility") {
+        return "Try including deep squats, hip opener stretches, and controlled high steps before you climb. Consistency trumps intensity with mobility!";
+      }
+      if (lastFocus === "power") {
+        return "Schedule max power moves like campus laddering or limit boulder problems early in your session, when freshest. Space out attempts and focus on exploding through hard moves.";
+      }
+      if (lastFocus === "mental") {
+        return "Spend a few minutes every session visualizing a send, or practice mindfulness between climbs. Try embracing stress as your body preparing for performance!";
+      }
+      return "Let me know what you want a plan for: strength, technique, endurance, mobility, power, or mental training.";
     }
 
-    // IF USER ASK GENERAL THING
-    if (txt.includes("what should") && txt.includes("do")) {
-      return "Let’s figure that out — what's your current goal: Send a grade? Improve a skill? Avoid burning out?";
+    // If user asks for "tips" or "drill"
+    if (txt.includes("tip") || txt.includes("advice") || txt.includes("drill")) {
+      if (lastFocus === "technique") {
+        return "Drill: Repeat a climb but pause for 2 seconds on every hold before moving—forces body awareness and control. Slow equals smooth, smooth equals strong!";
+      }
+      if (lastFocus === "strength") {
+        return "Drill: Reduce the number of holds used (eliminate easy feet or hands) to force bigger pulls and full-body engagement.";
+      }
+      if (lastFocus === "mental") {
+        return "Tip: Before a difficult route, try box breathing (4 seconds inhale, 4 hold, 4 exhale, 4 hold) and mentally rehearse each movement.";
+      }
+      if (lastFocus === "endurance") {
+        return "Drill: 4x4s – climb 4 problems in a row, rest 2 minutes, repeat 4 times. Focus on smooth movement and controlled breathing for each set.";
+      }
+      if (lastFocus === "mobility") {
+        return "Tip: Use hip openers like lizard stretch before and after climbing. Try to high-step on every climb, even when it's not required.";
+      }
+      if (lastFocus === "power") {
+        return "Try 'max blast' moves—pick one hard move per set and go all-in with perfect form. Full recovery between attempts!";
+      }
+      // Fallback if no focus set
+      return "Let me know your main focus area (technique/strength/endurance/mobility/power/mental), and I'll share a relevant drill or tip!";
     }
 
-    if (txt.includes("progress") || txt.includes("stuck")) {
-      return "Plateauing happens to every climber. The trick is consistency + attacking your weak points. Want a creative drill suggestion?";
-    }
-
-    // CATCHALL
-    reply = "Hmm… I'm feeling your energy. Want to focus today on power, technique, or mindset?";
-    return reply;
+    // Catch-all to invite further specifics without generic language
+    return "Tell me what you want to improve most—technique, strength, endurance, power, mobility, or mental approach? Want an actionable drill, a routine, or just some outside-the-box advice?";
   }
 
   function sendMessage() {
     if (!input.trim()) return;
     const userMsg = { role: "user", text: input };
-    const botReply = getBotReply(input);
-    const botMsg = { role: "assistant", text: botReply };
+    const botText = getBotReply(input);
+    const botMsg = { role: "assistant", text: botText };
     setMessages((msgs) => [...msgs, userMsg, botMsg]);
     setInput("");
   }
@@ -99,7 +155,7 @@ export default function ChatBot() {
                 fontWeight="bold"
                 color={m.role === "user" ? "blue.500" : "green.600"}
               >
-                {m.role === "user" ? "You" : "AI"}:
+                {m.role === "user" ? "You" : "Assistant"}:
               </Text>{" "}
               <Text as="span">{m.text}</Text>
             </Box>
@@ -115,7 +171,7 @@ export default function ChatBot() {
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask me anything about your climbing..."
+            placeholder="Type your question, struggle, or what you want to improve..."
             bg="white"
             onKeyDown={(e) => e.key === "Enter" && sendMessage()}
           />
