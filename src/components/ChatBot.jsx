@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { Box, Button, Input, VStack, Text } from "@chakra-ui/react";
+import { Box, VStack, Text, Input, Button } from "@chakra-ui/react";
 
 export default function ChatBot() {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      text:
-        "Hi climber! I'm here to help you get better, not just at what you enjoy, but at what will make the biggest impact. What's on your mind—do you want advice, motivation, or help working through a struggle?",
+      text: "Hi climber! I'm here to help you get better, not just at what you enjoy, but at what will make the biggest impact. What's on your mind—do you want advice, motivation, or help working through a struggle?",
     },
   ]);
   const [input, setInput] = useState("");
@@ -15,7 +14,6 @@ export default function ChatBot() {
   function getBotReply(userText) {
     const txt = userText.toLowerCase();
 
-    // Motivational greetings and emotional support
     if (txt.includes("hi") || txt.includes("hello")) {
       return "Welcome back! What aspect of your climbing do you want to talk about or improve today?";
     }
@@ -35,7 +33,6 @@ export default function ChatBot() {
       return "Plateaus are a sign you’re pushing your limits! Target what you avoid most and measure any improvement—no matter how small. Consistent effort will crack the plateau.";
     }
 
-    // User says what they are good at - gently nudge toward weaknesses
     if (
       txt.includes("i'm good at") ||
       txt.includes("i am good at") ||
@@ -50,7 +47,6 @@ export default function ChatBot() {
       return "It's great to enjoy climbing what you love. But real growth happens where you're least comfortable. Want to talk about what you avoid or dread at the gym?";
     }
 
-    // Training type selection
     if (txt.includes("technique")) {
       setLastFocus("technique");
       return "Focusing on technique is a game-changer. Practice drills like silent feet, backsteps, or foot-swap challenges. Do you know which movement feels least natural or most insecure for you?";
@@ -76,7 +72,6 @@ export default function ChatBot() {
       return "Mental training is often overlooked, but it's crucial. Try visualization, breathing routines, and controlled falls to master your nerves. Is fear or focus the bigger block for you?";
     }
 
-    // If user asks for a plan, drills, or resources
     if (txt.includes("plan") || txt.includes("routine")) {
       if (lastFocus === "technique") {
         return "Try silent feet and backstep drills every warmup. Afterward, focus on smooth, controlled movement on at least one climb per session. Want to track your results after a week?";
@@ -99,7 +94,6 @@ export default function ChatBot() {
       return "Let me know what you want a plan for: strength, technique, endurance, mobility, power, or mental training.";
     }
 
-    // If user asks for "tips" or "drill"
     if (txt.includes("tip") || txt.includes("advice") || txt.includes("drill")) {
       if (lastFocus === "technique") {
         return "Drill: Repeat a climb but pause for 2 seconds on every hold before moving—forces body awareness and control. Slow equals smooth, smooth equals strong!";
@@ -119,11 +113,9 @@ export default function ChatBot() {
       if (lastFocus === "power") {
         return "Try 'max blast' moves—pick one hard move per set and go all-in with perfect form. Full recovery between attempts!";
       }
-      // Fallback if no focus set
       return "Let me know your main focus area (technique/strength/endurance/mobility/power/mental), and I'll share a relevant drill or tip!";
     }
 
-    // Catch-all to invite further specifics without generic language
     return "Tell me what you want to improve most—technique, strength, endurance, power, mobility, or mental approach? Want an actionable drill, a routine, or just some outside-the-box advice?";
   }
 
