@@ -3,45 +3,85 @@ import { Box, Button, Input, VStack, Text } from "@chakra-ui/react";
 
 export default function ChatBot() {
   const [messages, setMessages] = useState([
-    { role: "assistant", text: "Hi! I am here to support your journey! Feel free to ask questions, tips, or struggles" }
+    {
+      role: "assistant",
+      text:
+        "Hi climber! I'm your personal support bot. Tell me what you're working on or struggling with — let's level up your game! 🧗‍♂️💪",
+    },
   ]);
   const [input, setInput] = useState("");
+  const [userWeakness, setUserWeakness] = useState(null);
 
-  // Basic "AI" logic: checks keywords
+  // Smarter AI logic: emotion, struggle, motivation
   function getBotReply(userText) {
     const txt = userText.toLowerCase();
+    let reply = "";
 
-    if (txt.includes("hard")) {
-      return "Climbing can be tough! Remember, every challenge is a chance to grow. Keep practicing, break the problem down, and don't give up!";
-    }
-    if (txt.includes("v4")) {
-      return "V4s can feel hard for many climbers. Stay consistent with your training, work on technique, and soon V4 will become your warm-up!";
-    }
-    if (txt.includes("scared") || txt.includes("afraid")) {
-      return "Feeling scared is normal! Trust your training, breathe deep, and take it one move at a time.";
-    }
-    if (txt.includes("progress")) {
-      return "Progress takes time. Celebrate your small victories along the way!";
-    }
-    if (txt.includes("injury")) {
-      return "Be sure to rest and recover. Listen to your body, and come back stronger!";
-    }
+    // BASIC CONVERSATION STARTERS
     if (txt.includes("hi") || txt.includes("hello")) {
-      return "Hello! How can I help your climbing today?";
+      return "Hey there! What's going on in your climbing lately?";
     }
-    return "I'm here to encourage you—ask anything about climbing, training, or motivation!";
+
+    // MOTIVATIONAL / EMOTIONAL RESPONSES
+    if (txt.includes("scared") || txt.includes("afraid")) {
+      return "It’s okay to feel scared! Are you more nervous on overhangs or runs where you’re high off the ground?";
+    }
+
+    // DETECT SPECIFIC STRUGGLES
+    if (txt.includes("grip") || txt.includes("fingers")) {
+      setUserWeakness("grip");
+      return "Finger strength is a long game. Try dead-hangs or limit boulders on small edges. Want help designing a grip routine?";
+    }
+    if (txt.includes("footwork")) {
+      setUserWeakness("footwork");
+      return "Footwork takes attention! Try Silent Feet or Eyes-Closed Feet drills to level up. Want me to suggest some?";
+    }
+    if (txt.includes("core") || txt.includes("body tension")) {
+      setUserWeakness("core");
+      return "Core is key! Planks, L-sits, and one-arm moves can make a huge difference. Need a weekly plan?";
+    }
+    if (txt.includes("endurance")) {
+      setUserWeakness("endurance");
+      return "Endurance comes with time. ARC sessions and 4x4s help. Want a sample endurance day plan?";
+    }
+    if (txt.includes("injury") || txt.includes("hurt")) {
+      return "First — rest and don’t rush it. Recovery is training too. Is it related to fingers, shoulders, or something else?";
+    }
+
+    // WEAKNESS FOLLOW-UP HINTING
+    if (txt.includes("i'm good at") || txt.includes("i like") || txt.includes("i prefer")) {
+      if (userWeakness) {
+        return `That's awesome — but don't forget to work on your ${userWeakness} too 😉. Want help tackling it with a fun drill?`;
+      } else {
+        return `Nice! What do you think you're *not yet* good at? That can unlock huge gains. Want to explore that?`;
+      }
+    }
+
+    // IF USER ASK GENERAL THING
+    if (txt.includes("what should") && txt.includes("do")) {
+      return "Let’s figure that out — what's your current goal: Send a grade? Improve a skill? Avoid burning out?";
+    }
+
+    if (txt.includes("progress") || txt.includes("stuck")) {
+      return "Plateauing happens to every climber. The trick is consistency + attacking your weak points. Want a creative drill suggestion?";
+    }
+
+    // CATCHALL
+    reply = "Hmm… I'm feeling your energy. Want to focus today on power, technique, or mindset?";
+    return reply;
   }
 
   function sendMessage() {
     if (!input.trim()) return;
     const userMsg = { role: "user", text: input };
-    const botMsg = { role: "assistant", text: getBotReply(input) };
-    setMessages(msgs => [...msgs, userMsg, botMsg]);
+    const botReply = getBotReply(input);
+    const botMsg = { role: "assistant", text: botReply };
+    setMessages((msgs) => [...msgs, userMsg, botMsg]);
     setInput("");
   }
 
   return (
-    <Box p={4} maxW="420px">
+    <Box p={4} maxW="500px">
       <VStack align="stretch" spacing={2} w="100%">
         <Box
           borderWidth={1}
@@ -65,16 +105,21 @@ export default function ChatBot() {
             </Box>
           ))}
         </Box>
-        <Box as="form" onSubmit={e => { e.preventDefault(); sendMessage(); }}>
+        <Box
+          as="form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            sendMessage();
+          }}
+        >
           <Input
             value={input}
-            onChange={e => setInput(e.target.value)}
-            placeholder="Type your message..."
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Ask me anything about your climbing..."
             bg="white"
-            mr={2}
-            onKeyDown={e => e.key === "Enter" && sendMessage()}
+            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
           />
-          <Button mt={2} colorScheme="blue" onClick={sendMessage} w="100%">
+          <Button mt={2} colorScheme="teal" onClick={sendMessage} w="100%">
             Send
           </Button>
         </Box>
