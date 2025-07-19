@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Box, VStack, Text, Input, Button } from "@chakra-ui/react";
-import { getHFReply } from "./utils/hf"; // 👈 update path if this is inside src/components/
+import { getHFReply } from "../utils/hf"; // 👈 adjust if you're not in /components
 
 export default function ChatBot() {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      text: "Hi climber! I'm your AI coach. Want help with drills, training routines, mindset, or breaking your plateaus?",
+      text:
+        "Hi climber! I'm here to help you get better—not just at what you enjoy, but at what will make the biggest impact. What's on your mind: advice, motivation, or help working through a struggle?",
     },
   ]);
   const [input, setInput] = useState("");
@@ -15,8 +16,8 @@ export default function ChatBot() {
   const sendMessage = async () => {
     if (!input.trim()) return;
 
-    const userMsg = { role: "user", text: input };
-    const updatedMessages = [...messages, userMsg];
+    const userMessage = { role: "user", text: input };
+    const updatedMessages = [...messages, userMessage];
 
     setMessages(updatedMessages);
     setInput("");
@@ -24,17 +25,19 @@ export default function ChatBot() {
 
     try {
       const botText = await getHFReply(input, updatedMessages);
-      const botMsg = { role: "assistant", text: botText };
-      setMessages([...updatedMessages, botMsg]);
+      const botMessage = { role: "assistant", text: botText };
+      setMessages([...updatedMessages, botMessage]);
     } catch (err) {
-      const errorMsg = {
-        role: "assistant",
-        text: "Oops! My climbing shoes got stuck. Try again shortly.",
-      };
-      setMessages([...updatedMessages, errorMsg]);
-    } finally {
-      setLoading(false);
+      setMessages([
+        ...updatedMessages,
+        {
+          role: "assistant",
+          text: "⚠️ Oops. The climbing coach slipped off the wall. Please try again.",
+        },
+      ]);
     }
+
+    setLoading(false);
   };
 
   return (
@@ -51,11 +54,7 @@ export default function ChatBot() {
         >
           {messages.map((m, idx) => (
             <Box key={idx} mb={1} textAlign={m.role === "user" ? "right" : "left"}>
-              <Text
-                as="span"
-                fontWeight="bold"
-                color={m.role === "user" ? "blue.500" : "green.600"}
-              >
+              <Text as="span" fontWeight="bold" color={m.role === "user" ? "blue.500" : "green.600"}>
                 {m.role === "user" ? "You" : "Coach"}:
               </Text>{" "}
               <Text as="span">{m.text}</Text>
@@ -74,7 +73,7 @@ export default function ChatBot() {
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask your AI climbing coach anything..."
+            placeholder="Ask your AI coach anything climbing-related..."
             bg="white"
           />
           <Button mt={2} colorScheme="teal" onClick={sendMessage} w="100%" isLoading={loading}>
