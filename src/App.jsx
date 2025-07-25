@@ -32,6 +32,7 @@ import {
 import { keyframes } from "@emotion/react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ReminderControls from "./components/ReminderControls";
+import HealthImport from "./components/HealthImport";
 
 // ----- DASHBOARD DATA -----
 const user = {
@@ -53,18 +54,15 @@ const drillCategories = {
   Power: [
     {
       name: "Double Dyno",
-      description:
-        "Only perform double dynos to train explosive power and commitment.",
+      description: "Only perform double dynos to train explosive power and commitment.",
     },
     {
       name: "One-Handed Climbing",
-      description:
-        "Use only one hand (alternate per attempt). Builds power and body tension.",
+      description: "Use only one hand (alternate per attempt). Builds power and body tension.",
     },
     {
       name: "Three Holds Only",
-      description:
-        "Limit yourself to 3 holds at a time. Trains static power and body control.",
+      description: "Limit yourself to 3 holds at a time. Trains static power and body control.",
     },
     {
       name: "Max Hangs",
@@ -73,8 +71,7 @@ const drillCategories = {
     },
     {
       name: "Limit Bouldering",
-      description:
-        "Project the hardest move or problem you can do in 3–8 tries. Power over volume.",
+      description: "Project the hardest move or problem you can do in 3–8 tries. Power over volume.",
     },
   ],
   Technique: [
@@ -112,8 +109,7 @@ const drillCategories = {
   Mobility: [
     {
       name: "Slab Flow",
-      description:
-        "Link slab climbs with minimal rest. Encourages balance and posture.",
+      description: "Link slab climbs with minimal rest. Encourages balance and posture.",
     },
     {
       name: "High Steps & Flags",
@@ -245,13 +241,15 @@ function ProgressAnalytics() {
 
   // Compute simple stats:
   const totalSessions = sessions.length;
-  const daysActive = [...new Set(sessions.map(s => s.date?.slice(0, 10)))].length;
+  const daysActive = [...new Set(sessions.map((s) => s.date?.slice(0, 10)))].length;
   const totalDrills = sessions.flatMap((s) => s.drills ?? []).length;
 
   // Calculate current streak (basic consecutive day streak calculation)
   const computeStreak = (logs) => {
     if (!logs.length) return 0;
-    const dates = [...new Set(logs.map((l) => l.date?.slice(0, 10)))].sort((a, b) => new Date(b) - new Date(a));
+    const dates = [...new Set(logs.map((l) => l.date?.slice(0, 10)))].sort(
+      (a, b) => new Date(b) - new Date(a)
+    );
     let streak = 0;
     let prevDate = new Date();
     for (const dateStr of dates) {
@@ -300,7 +298,8 @@ function ProgressAnalytics() {
       <List spacing={2} maxH="200px" overflowY="auto">
         {sessions.slice(-5).reverse().map((s, i) => (
           <ListItem key={i}>
-            {new Date(s.date).toLocaleDateString()}: {s.drills?.join(", ") || "No drills"} – {s.duration ?? "?"} min
+            {new Date(s.date).toLocaleDateString()}: {s.drills?.join(", ") || "No drills"} –{" "}
+            {s.duration ?? "?"} min
           </ListItem>
         ))}
         {sessions.length === 0 && <Text>No session data yet.</Text>}
@@ -311,7 +310,6 @@ function ProgressAnalytics() {
 
 // ----- AI COACH -----
 function ChatBot() {
-  // ... your existing ChatBot code remains unchanged ...
   const [messages, setMessages] = useState([
     {
       role: "assistant",
@@ -323,8 +321,7 @@ function ChatBot() {
   const [lastFocus, setLastFocus] = useState(null);
 
   function getBotReply(userText) {
-    // ... existing getBotReply logic ...
-    // (unchanged for brevity)
+    // Placeholder for your existing getBotReply logic
     return "Tell me your main focus or what you want to improve: technique, strength, power, endurance, mobility, or mental approach. I’ll help with plans, tips, or honest outside-the-box advice!";
   }
 
@@ -473,7 +470,7 @@ function App() {
                     BetaBoost
                   </Heading>
 
-                  {/* Tabs with ProgressAnalytics in Progress tab */}
+                  {/* ---- TABS ---- */}
                   <Tabs
                     isFitted
                     variant="soft-rounded"
@@ -488,7 +485,9 @@ function App() {
                       <Tab>Progress</Tab>
                       <Tab>Community</Tab>
                       <Tab>AI Coach</Tab>
+                      <Tab>Health Import</Tab> {/* New Tab */}
                     </TabList>
+
                     <TabPanels>
                       <TabPanel>
                         <Heading size="md" color="black" mb={2}>
@@ -528,7 +527,7 @@ function App() {
                             progress!</i>
                         </Text>
 
-                        {/* Example: Log Session Button for demo/testing */}
+                        {/* Log Session Button for demo/testing */}
                         <Button
                           mt={4}
                           colorScheme="green"
@@ -620,6 +619,11 @@ function App() {
 
                       <TabPanel>
                         <ChatBot />
+                      </TabPanel>
+
+                      {/* Health Import tab panel */}
+                      <TabPanel>
+                        <HealthImport />
                       </TabPanel>
                     </TabPanels>
                   </Tabs>
