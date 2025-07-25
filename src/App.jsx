@@ -26,6 +26,7 @@ import {
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ReminderControls from "./components/ReminderControls";
 
 // ----- DASHBOARD DATA -----
 const user = {
@@ -136,11 +137,10 @@ const colorWave = keyframes`
   100% {background-position: 0% 50%;text-shadow: 2px 4px 16px #122;}
 `;
 
-// Use only the "ocean" color palette for the theme
 const theme = extendTheme({
   colors: {
     ocean: {
-      800: "#0d1a2f", // Very dark/navy
+      800: "#0d1a2f",
       700: "#193366",
       600: "#23408f",
       400: "#2b53c0",
@@ -384,7 +384,7 @@ function ChatBot() {
 // ----- SUCCESS PAGE -----
 function Success() {
   useEffect(() => {
-    localStorage.setItem("betaBoostPremium", "true"); // mark user as premium on success
+    localStorage.setItem("betaBoostPremium", "true");
   }, []);
 
   return (
@@ -405,9 +405,30 @@ function Cancel() {
   );
 }
 
-// ----- MAIN APP WITH ROUTING AND PREMIUM GATING -----
+// ----- MAIN APP WITH ROUTING AND REMINDER LOGIC -----
 function App() {
   const isPremium = localStorage.getItem("betaBoostPremium") === "true";
+
+  // --------- MISSED SESSION REMINDER LOGIC ---------
+  useEffect(() => {
+    function daysSince(dateStr) {
+      if (!dateStr) return 9999;
+      const last = new Date(dateStr);
+      const now = new Date();
+      // Compare date only, ignore time of day
+      return Math.floor((now - last) / (1000 * 60 * 60 * 24));
+    }
+    const lastSession = localStorage.getItem("lastSessionDate");
+    if (
+      lastSession &&
+      daysSince(lastSession) >= 3 &&
+      Notification?.permission === "granted"
+    ) {
+      new Notification("⏰ Missed climbing day!", {
+        body: "Get back on your streak – time to log a session!",
+      });
+    }
+  }, []);
 
   return (
     <ChakraProvider theme={theme}>
@@ -439,6 +460,9 @@ function App() {
                   boxShadow="2xl"
                   overflowY="auto"
                 >
+                  {/* ---- Reminders Block ---- */}
+                  <ReminderControls />
+
                   {/* User info row */}
                   <Flex align="center" justify="flex-end" mb={1}>
                     <Box>
@@ -519,6 +543,21 @@ function App() {
                           Personalized tip:{" "}
                           <i>Schedule a session focused on your biggest weakness for the fastest
                             progress!</i>
+                        </Text>
+
+                        {/* Example: Add "Log Session" button for demo/testing */}
+                        <Button
+                          mt={4}
+                          colorScheme="green"
+                          onClick={() => {
+                            localStorage.setItem("lastSessionDate", new Date().toISOString());
+                            window.location.reload();
+                          }}
+                        >
+                          Log Today's Session (Demo)
+                        </Button>
+                        <Text mt={2} fontSize="sm" color="gray.500">
+                          (Click to simulate a workout log and update your reminder status)
                         </Text>
                       </TabPanel>
 
