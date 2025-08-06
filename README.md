@@ -65,5 +65,15 @@ Questions, suggestions, or want to contribute?
 Email: Jonathon.koerner@gmail.com
 
 ---
+## Tech Stack
+
+- React with Chakra UI for UI components and theming
+- Vite as the build tool and development server
+- Integrated AI assistant powered by Hugging Face APIs
+- Responsive design optimized for desktop and mobile
+
+## Contributing
+
+Bug reports and feature requests are welcome! Please open an issue or submit a pull request on GitHub.
 
 _This project is always evolving. If you use BetaBoost or want to see new features, please reach out!_
