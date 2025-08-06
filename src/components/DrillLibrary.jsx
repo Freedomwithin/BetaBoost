@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Heading,
@@ -11,6 +11,8 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
+  Input,
+  useColorModeValue,
 } from "@chakra-ui/react";
 
 const drillCategories = {
@@ -63,54 +65,92 @@ const drillCategories = {
 };
 
 export default function DrillLibrary() {
+  const [search, setSearch] = useState("");
+  const textColor = useColorModeValue("gray.800", "gray.200");
+  const bgColor = useColorModeValue("white", "gray.700");
+  const hoverBgColor = useColorModeValue("gray.100", "gray.600");
+  const borderColor = useColorModeValue("blue.400", "blue.300");
+  const headingColor = useColorModeValue("blue.800", "blue.200");
+  const iconColor = useColorModeValue("blue.600", "blue.300");
+
+  // Filter drills by search term (case-insensitive)
+  const filteredCategories = Object.entries(drillCategories).reduce((acc, [category, drills]) => {
+    const filteredDrills = drills.filter(({ name, description }) => {
+      const searchLower = search.toLowerCase();
+      return (
+        name.toLowerCase().includes(searchLower) ||
+        description.toLowerCase().includes(searchLower)
+      );
+    });
+    if (filteredDrills.length > 0) {
+      acc[category] = filteredDrills;
+    }
+    return acc;
+  }, {});
+
   return (
-    <Box>
-      <Heading size="md" mb={6} textAlign="center" color="black">
+    <Box maxW="600px" mx="auto" p={4}>
+      <Heading size="md" mb={6} textAlign="center" color={headingColor}>
         Drill Library
       </Heading>
+
+      <Input
+        mb={6}
+        placeholder="Search drills..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        aria-label="Search climbing drills"
+      />
+
       <Accordion allowMultiple defaultIndex={[0]}>
-        {Object.entries(drillCategories).map(([category, drills]) => (
-          <AccordionItem key={category}>
-            <h2>
-              <AccordionButton>
-                <Box flex="1" textAlign="left" fontWeight="bold" color="ocean.800">
-                  {category}
-                </Box>
-                <AccordionIcon color="ocean.600" />
-              </AccordionButton>
-            </h2>
-            <AccordionPanel pb={4}>
-              <List spacing={3}>
-                {drills.map((drill, idx) => (
-                  <ListItem
-                    key={idx}
-                    borderLeft="4px solid"
-                    borderColor="ocean.400"
-                    pl={3}
-                    mb={2}
-                    bg="whiteAlpha.900"
-                    borderRadius="lg"
-                    transition="all 0.2s"
-                    _hover={{ bg: "ocean.100" }}
-                  >
-                    <Text fontWeight="bold" fontSize="md" color="ocean.800">
-                      {drill.name}
-                    </Text>
-                    <Text fontSize="sm" color="gray.700">
-                      {drill.description}
-                    </Text>
-                  </ListItem>
-                ))}
-              </List>
-            </AccordionPanel>
-          </AccordionItem>
-        ))}
+        {Object.entries(filteredCategories).length === 0 ? (
+          <Text textAlign="center" color="gray.500" my={6}>
+            No drills found for "{search}"
+          </Text>
+        ) : (
+          Object.entries(filteredCategories).map(([category, drills]) => (
+            <AccordionItem key={category}>
+              <h2>
+                <AccordionButton>
+                  <Box flex="1" textAlign="left" fontWeight="bold" color={headingColor}>
+                    {category}
+                  </Box>
+                  <AccordionIcon color={iconColor} />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel pb={4}>
+                <List spacing={3}>
+                  {drills.map(({ name, description }) => (
+                    <ListItem
+                      key={`${category}-${name}`}
+                      borderLeft="4px solid"
+                      borderColor={borderColor}
+                      pl={3}
+                      mb={2}
+                      bg={bgColor}
+                      borderRadius="lg"
+                      transition="all 0.2s"
+                      _hover={{ bg: hoverBgColor }}
+                    >
+                      <Text fontWeight="bold" fontSize="md" color={headingColor}>
+                        {name}
+                      </Text>
+                      <Text fontSize="sm" color={textColor}>
+                        {description}
+                      </Text>
+                    </ListItem>
+                  ))}
+                </List>
+              </AccordionPanel>
+            </AccordionItem>
+          ))
+        )}
       </Accordion>
+
       <Divider my={8} />
-      <Text fontSize="sm" color="gray.600" textAlign="center">
+      <Text fontSize="sm" color="gray.600" textAlign="center" userSelect="none">
         Mix and match drills based on your goals — a balanced climber trains strength, skill, and the mind 🧠💪
       </Text>
     </Box>
   );
 }
-
